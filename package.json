@@ -1,0 +1,30 @@
+{
+  "name": "use-loading-steps",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.modern.js",
+  "source": "index.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublish": "yarn build",
+    "build": "microbundle --compress --no-sourcemap"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.43",
+    "microbundle": "^0.14.2",
+    "typescript": "^4.6.3"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "dependencies": {
+    "@xstate/react": "^2.0.1",
+    "xstate": "^4.30.6"
+  },
+  "author": "@edingroot",
+  "repository": "edingroot/use-loading-steps"
+}
