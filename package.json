@@ -1,17 +1,20 @@
 {
   "name": "use-loading-steps",
+  "keywords": ["react", "lazy", "loading", "state"],
   "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.modern.js",
-  "source": "index.ts",
+  "source": "lib/index.ts",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "lib",
+    "readme.md"
   ],
   "scripts": {
-    "prepublish": "yarn build",
-    "build": "microbundle --compress --no-sourcemap"
+    "prepublish": "rm -rf dist && yarn build",
+    "build": "rm -rf dist && microbundle --compress --no-sourcemap"
   },
   "devDependencies": {
     "@types/react": "^17.0.43",
