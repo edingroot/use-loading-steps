@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 import {isDone, isLoading, isReloading, LState, useLoadingSteps} from "../index";
 import React, {useMemo} from "react";
-import {createTestComponent, noop, wait} from "../test_util";
+import {createTestComponent, neverCalled, wait} from "../test_util";
 
 describe('no delay', () => {
     it('initial loaded = true', async () =>  {
@@ -37,7 +37,7 @@ describe('no delay', () => {
 
     it('single step', async () =>  {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -58,12 +58,13 @@ describe('no delay', () => {
     it('multiple steps', async () =>  {
         const stepCnt = 3;
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
             expectedState = LState.LOADING;
 
+            await wait(10);
             for (let i = 0; i < stepCnt; i++) {
                 if (i == stepCnt - 1) {
                     expectedState = LState.DONE;
@@ -77,6 +78,39 @@ describe('no delay', () => {
         await createTestComponent(() => {
             const [loadingState, setStepDone] = useLoadingSteps(stepCnt, false);
             setStepDoneCb = setStepDone;
+            useMemo(() => expect(loadingState).toEqual(expectedState), [loadingState]);
+        });
+    });
+
+    it('multiple steps: skip step', async () =>  {
+        const stepCnt = 3;
+        let expectedState: LState;
+        let setStepDoneCb: (s: string) => void = neverCalled;
+        let skipStepCb: (s: string) => void = neverCalled;
+
+        // Do before creating test component
+        const doSteps = async () => {
+            expectedState = LState.LOADING;
+
+            await wait(10);
+            for (let i = 0; i < stepCnt; i++) {
+                if (i == stepCnt - 1) {
+                    expectedState = LState.DONE;
+                }
+                if (i % 2 === 0) {
+                    setStepDoneCb(`step${i + 1}`);
+                } else {
+                    skipStepCb(`step${i + 1}`);
+                }
+                await wait(10); // pause shortly for event loop to run component logics
+            }
+        }
+        doSteps().then();
+
+        await createTestComponent(() => {
+            const [loadingState, setStepDone, _, skipStep] = useLoadingSteps(stepCnt, false);
+            setStepDoneCb = setStepDone;
+            skipStepCb = skipStep;
             useMemo(() => expect(loadingState).toEqual(expectedState), [loadingState]);
         });
     });
@@ -96,7 +130,7 @@ describe('with render delay', () => {
 
     it('single step', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -122,7 +156,7 @@ describe('with render delay', () => {
 
     it('multiple steps', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -151,7 +185,7 @@ describe('with render delay', () => {
 
     it('multiple steps: done before render delay timeout', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -183,8 +217,8 @@ describe('with reset delay', () => {
 
     it('multiple steps', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
-        let resetLoadingCb: () => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
+        let resetLoadingCb: () => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -228,8 +262,8 @@ describe('with render delay + reset delay', () => {
 
     it('multiple steps', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
-        let resetLoadingCb: () => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
+        let resetLoadingCb: () => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
@@ -276,7 +310,7 @@ describe('with done delay', () => {
 
     it('multiple steps', async () => {
         let expectedState: LState;
-        let setStepDoneCb: (s: string) => void = noop;
+        let setStepDoneCb: (s: string) => void = neverCalled;
 
         // Do before creating test component
         const doSteps = async () => {
