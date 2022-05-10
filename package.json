@@ -1,6 +1,13 @@
 {
   "name": "use-loading-steps",
-  "keywords": ["react", "lazy", "loading", "state"],
+  "keywords": [
+    "react",
+    "lazy",
+    "loading",
+    "state"
+  ],
+  "author": "@edingroot",
+  "repository": "edingroot/use-loading-steps",
   "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,13 +20,25 @@
     "readme.md"
   ],
   "scripts": {
-    "prepublish": "rm -rf dist && yarn build",
-    "build": "rm -rf dist && microbundle --compress --no-sourcemap"
+    "prepublish": "rm -rf dist/* && yarn build",
+    "build": "rm -rf dist/* && microbundle --compress --no-sourcemap",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/jest": "^27.5.0",
     "@types/react": "^17.0.43",
+    "@types/react-test-renderer": "^18.0.0",
+    "jest": "^28.1.0",
     "microbundle": "^0.14.2",
-    "typescript": "^4.6.3"
+    "react": "*",
+    "react-test-renderer": "^18.1.0",
+    "regenerator-runtime": "^0.13.9",
+    "ts-jest": "^28.0.2",
+    "ts-loader": "^9.3.0",
+    "tslint": "^6.1.3",
+    "tslint-react": "^5.0.0",
+    "typescript": "^4.6.4"
   },
   "peerDependencies": {
     "react": "*"
@@ -28,6 +47,8 @@
     "@xstate/react": "^2.0.1",
     "xstate": "^4.30.6"
   },
-  "author": "@edingroot",
-  "repository": "edingroot/use-loading-steps"
+  "jest": {
+    "verbose": true,
+    "testTimeout": 10000
+  }
 }
