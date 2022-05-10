@@ -20,9 +20,9 @@
     "readme.md"
   ],
   "scripts": {
-    "prepublish": "rm -rf dist/* && yarn build",
-    "build": "rm -rf dist/* && microbundle --compress --no-sourcemap",
-    "test": "jest"
+    "clean": "rm -rf dist/* node_modules",
+    "build": "yarn clean && yarn install && microbundle --compress --no-sourcemap",
+    "test": "npm install react && jest"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.16.7",
@@ -31,7 +31,6 @@
     "@types/react-test-renderer": "^18.0.0",
     "jest": "^28.1.0",
     "microbundle": "^0.14.2",
-    "react": "*",
     "react-test-renderer": "^18.1.0",
     "regenerator-runtime": "^0.13.9",
     "ts-jest": "^28.0.2",
@@ -41,7 +40,7 @@
     "typescript": "^4.6.4"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "^18.1.0"
   },
   "dependencies": {
     "@xstate/react": "^2.0.1",
