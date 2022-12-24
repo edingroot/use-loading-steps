@@ -126,7 +126,7 @@ export const useLoadingSteps = (totalSteps: number, initialLoaded: boolean = fal
         silentLoadingTimeout.current = Math.max(resetDelay, renderDelay);
 
         debug(`[reset] delay ${silentLoadingTimeout.current}ms resetting to ${resetState}`);
-        timers.current.forEach(timer => timer && clearTimeout(timer));
+        timers.current.forEach(timer => Number.isInteger(timer) && clearTimeout(timer));
         timers.current.length = 0;
         transition(FSMEvent.RESET);
     };
